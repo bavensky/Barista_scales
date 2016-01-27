@@ -33,7 +33,8 @@ int Hot_cof = 8, Ice_cof = 9;
 
 void setup() {
   Serial.begin(9600);
-  lcd.init(); 
+//  lcd.init(); 
+  lcd.begin();
   lcd.backlight();
   delay(100);
   
@@ -42,7 +43,7 @@ void setup() {
   
   lcd.home();
   lcd.print("  Calibrating ! ");
-  scale.set_scale(2132.10f);
+  scale.set_scale(2132.50f);
   scale.tare();
   delay(1000);
 }
@@ -100,10 +101,14 @@ void loop() {
       lcd.setCursor(0, 1);
       lcd.print("Coffee = ");
       weight = int(scale.get_units(10));
-      if(weight == EEPROM.read(Hot_cof)) 
+      if(weight == EEPROM.read(Hot_cof))  {
         lcd.print(" HOT  ");
-      if(weight == EEPROM.read(Ice_cof)) 
+        beep(); 
+      }        
+      if(weight == EEPROM.read(Ice_cof))  {
         lcd.print(" ICE  ");
+        beep(); 
+      }
       else
         lcd.print("      ");
       Serial.print(weight);
